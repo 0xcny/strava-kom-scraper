@@ -1,0 +1,23 @@
+services:
+  kom-scraper:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - STRAVA_EMAIL=${STRAVA_EMAIL}
+      - GMAIL_USER=${GMAIL_USER}
+      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - API_SECRET=${API_SECRET}
+      - PORT=3001
+      - SESSION_PATH=/app/session-data/session.json
+      - FLOPPY_USER=${FLOPPY_USER}
+      - FLOPPY_PASS=${FLOPPY_PASS}
+      - ATHLETE_ID=${ATHLETE_ID}
+      - DISCORD_WEBHOOK_SCRAPER=${DISCORD_WEBHOOK_SCRAPER}
+      - DISCORD_WEBHOOK_ALERTS=${DISCORD_WEBHOOK_ALERTS}
+    volumes:
+      - session-data:/app/session-data
+    restart: unless-stopped
+
+volumes:
+  session-data:

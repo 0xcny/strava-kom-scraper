@@ -1,0 +1,6 @@
+node_modules
+dumps
+session.json
+.env
+test-*.ts
+mark-read.ts
