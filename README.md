@@ -1,30 +1,10 @@
-# kom-scraper
+# strava-kom-scraper
 
 Fallback data source for the KomQuest update pipeline. Scrapes an athlete's KOM segment list from Strava's web UI and serves it via HTTP. Used when the Strava API is rate-limited or unavailable.
 
-## How it fits in
+## Stack
 
-The KomQuest update API (Vercel) runs every hour at :00 to detect KOM gains and losses. It tries the Strava API first, but Strava aggressively rate-limits — so this scraper runs at :30 to have fresh data cached and ready as a fallback.
-
-```
-:30 every hour                     :00 every hour
-┌──────────────┐                   ┌──────────────────────┐
-│  kom-scraper │                   │  Update API (Vercel) │
-│              │   GET /scrape     │                      │
-│  Strava HTML ├──────────────────>│  1. Try Strava API   │
-│  → cache.json│   (fallback)      │  2. Fallback: scraper│
-└──────────────┘                   │  3. Diff with DB     │
-                                   │  4. Record gains/    │
-                                   │     losses           │
-                                   └─────────┬────────────┘
-                                             │
-                                   ┌─────────▼────────────┐
-                                   │  PocketBase          │
-                                   │  (kom_efforts,       │
-                                   │   kom_timeseries,    │
-                                   │   segments)          │
-                                   └──────────────────────┘
-```
+Bun, TypeScript, Playwright, Cheerio, ImapFlow, Docker
 
 ## What it does
 
@@ -74,10 +54,6 @@ docker compose up
 | `FLOPPY_PASS` | Residential proxy password |
 | `SESSION_PATH` | Path to persist session state |
 | `PORT` | HTTP server port (default 3001) |
-
-## Stack
-
-Bun, TypeScript, Playwright, Cheerio, ImapFlow, Docker
 
 ## Project structure
 
